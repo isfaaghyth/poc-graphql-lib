@@ -6,8 +6,14 @@ import gql.util.GqlException
 
 open class Gql {
 
+    private lateinit var url: String
+
     private lateinit var requestBuilder: RequestBuilder
     private val params = mutableMapOf<String, Any>()
+
+    fun setUrl(mainUrl: String) = apply {
+        url = mainUrl
+    }
 
     fun queries(rawQuery: String) = apply {
         requestBuilder = RequestBuilder(rawQuery)
@@ -33,6 +39,14 @@ open class Gql {
         requestBuilder.parameters(gqlParams)
     }
 
+    fun request(result: (String) -> Unit) = apply {
+        if (!::url.isInitialized) {
+            return GqlException("$UrlNotFoundException you haven't set main url yet.")
+        }
+
+        result("berhasil!")
+    }
+
     private fun collectParameters(query: String) = apply {
         params.clear()
         params.putAll(QueryParameterParser.parameters(query))
@@ -42,6 +56,7 @@ open class Gql {
         private const val ArrayIndexOutOfBoundsException = "ArrayIndexOutOfBoundsException:"
         private const val IllegalArgumentException = "IllegalArgumentException:"
         private const val ObjectNotFoundException = "ObjectNotFoundException:"
+        private const val UrlNotFoundException = "UrlNotFoundException:"
     }
 
 }

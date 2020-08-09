@@ -5,12 +5,15 @@ fun main() {
 }
 
 fun new() {
-    Gql().queries(fakeQuery())
+    Gql().setUrl("http://isfa.com/gql")
+        .queries(fakeQuery())
         .parameters(mapOf(
             "param1" to "Isfa",
             "param2" to 23,
             "param3" to true
-        ))
+        )).request {
+            println(it)
+        }
 }
 
 fun fakeQuery(): String {
