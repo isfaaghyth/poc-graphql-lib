@@ -1,5 +1,6 @@
 package gql
 
+import gql.network.OkhttpBuilder
 import gql.network.RequestBuilder
 import gql.query.QueryParameterParser
 import gql.util.GqlException
@@ -10,6 +11,8 @@ open class Gql {
 
     private lateinit var requestBuilder: RequestBuilder
     private val params = mutableMapOf<String, Any>()
+
+    private val network by lazy { OkhttpBuilder() }
 
     fun setUrl(mainUrl: String) = apply {
         url = mainUrl
@@ -39,12 +42,17 @@ open class Gql {
         requestBuilder.parameters(gqlParams)
     }
 
-    fun request(result: (String) -> Unit) = apply {
+    fun request(result: (String?) -> Unit) = apply {
         if (!::url.isInitialized) {
             return GqlException("$UrlNotFoundException you haven't set main url yet.")
         }
 
-        result("berhasil!")
+        result(
+            network.post(
+                url,
+                requestBuilder.build()
+            )
+        )
     }
 
     private fun collectParameters(query: String) = apply {
