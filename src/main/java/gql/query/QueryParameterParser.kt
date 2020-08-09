@@ -1,4 +1,6 @@
-package query
+package gql.query
+
+import gql.entity.QueryParams
 
 object QueryParameterParser {
 
@@ -16,8 +18,13 @@ object QueryParameterParser {
     fun separateParams(param: String): Pair<String, String> {
         val result = param.split(":")
         val variable = result[0].drop(1).trim()
-        val dataType = result[1].trim()
+        val dataType = "java.lang.${result[1].trim().replaceInt()}"
         return Pair(variable, dataType)
+    }
+
+    private fun String.replaceInt(): String {
+        if (this == "Int") return "Integer"
+        return this
     }
 
 }
