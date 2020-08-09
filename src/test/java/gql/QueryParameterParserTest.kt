@@ -17,12 +17,17 @@ class QueryParameterParserTest {
         Assert.assertEquals(result, expectedValue)
     }
 
-    @Test fun `should return param1 as variable and String as data type of param1`() {
+    @Test fun `old - should return param1 as variable and String as data type of param1`() {
         val expectedValue = arrayOf(QueryParams("param1", "java.lang.String"))
-        val result = QueryParameterParser.parameters(query)
-        println(result)
+        val result = QueryParameterParser.oldParameters(query)
         Assert.assertEquals(result.first().variable, expectedValue.first().variable)
         Assert.assertEquals(result.first().type, expectedValue.first().type)
+    }
+
+    @Test fun `new - should return param1 as variable and String as data type of param1`() {
+        val expectedValue = mapOf("param1" to "java.lang.String")
+        val result = QueryParameterParser.parameters(query)
+        Assert.assertEquals(result["param1"], expectedValue["param1"])
     }
 
     @Test fun `validate variable data type with java reflection`() {
