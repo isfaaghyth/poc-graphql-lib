@@ -11,7 +11,7 @@ object QueryParameterParser {
             }.toList()
     }
 
-    fun separateParams(param: String): Pair<String, String> {
+    private fun separateParams(param: String): Pair<String, String> {
         val result = param.split(":")
         return Pair(result[0].drop(1).trim(), result[1].trim())
     }
