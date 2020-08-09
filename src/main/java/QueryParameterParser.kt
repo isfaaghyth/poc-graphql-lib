@@ -1,6 +1,6 @@
 object QueryParameterParser {
 
-    private const val pattern = "\\\$[A-Za-z]+(\\\\.[A-Za-z]+)*: (?:String|Int|Boolean)"
+    private const val pattern = "\\\$[A-Za-z|0-9]+(\\.[A-Za-z]+)*: (?:String|Int|Boolean)"
     private val regex = Regex(pattern)
 
     fun parameters(query: String): List<QueryParams> {
@@ -11,7 +11,7 @@ object QueryParameterParser {
             }.toList()
     }
 
-    private fun separateParams(param: String): Pair<String, String> {
+    fun separateParams(param: String): Pair<String, String> {
         val result = param.split(":")
         return Pair(result[0].drop(1).trim(), result[1].trim())
     }

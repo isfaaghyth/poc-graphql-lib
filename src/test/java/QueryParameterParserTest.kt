@@ -4,27 +4,20 @@ import util.FileUtil
 
 class QueryParameterParserTest {
 
-    private val pattern = "\\\$[A-Za-z]+(\\\\.[A-Za-z]+)*: (?:String|Int|Boolean)"
-    private val regex = Regex(pattern)
-
     private val query = FileUtil.readFile("/sample.gql")
 
     @Test fun `should separate parameters correctly`() {
         val givenValue = "\$param: String"
         val expectedValue = Pair("param", "String")
-        val split = givenValue.split(":")
-        val result = Pair(split[0].drop(1).trim(), split[1].trim())
+        val result = QueryParameterParser.separateParams(givenValue)
         Assert.assertEquals(result, expectedValue)
     }
 
-    @Test fun `should return parameters`() {
-        val expectedValue = arrayOf(
-            QueryParams("param1", "String"),
-            QueryParams("param2", "Int"),
-            QueryParams("param3", "Boolean")
-        )
-
-        println(regex.find(query))
+    @Test fun `should return param1 as variable and String as data type of param1`() {
+        val expectedValue = arrayOf(QueryParams("param1", "String"))
+        val result = QueryParameterParser.parameters(query)
+        Assert.assertEquals(result.first().variable, expectedValue.first().variable)
+        Assert.assertEquals(result.first().type, expectedValue.first().type)
     }
 
 }
