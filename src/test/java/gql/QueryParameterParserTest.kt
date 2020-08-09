@@ -12,7 +12,7 @@ class QueryParameterParserTest {
 
     @Test fun `should separate parameters correctly`() {
         val givenValue = "\$param: String"
-        val expectedValue = Pair("param", "String")
+        val expectedValue = Pair("param", "java.lang.String")
         val result = QueryParameterParser.separateParams(givenValue)
         Assert.assertEquals(result, expectedValue)
     }
