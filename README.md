@@ -36,9 +36,14 @@ mutation employee($name: String, $age: Int, $verified: Boolean) {
 ```kt
 Gql()
     .queries("query_sample.json")
-    .parameters(arrayOf(
-        "Muh Isfhani Ghiath",
-        23,
-        true
+    .parameters(mapOf(
+        "name" to "Muh Isfhani Ghiath",
+        "age" to 23,
+        "verified" to true
     ))
+    .request { response ->
+        if (response != null) {
+            // yey!
+        }
+    }
 ```
