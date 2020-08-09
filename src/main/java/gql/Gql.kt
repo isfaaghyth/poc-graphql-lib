@@ -15,11 +15,11 @@ open class Gql {
     }
 
     fun parameters(gqlParams: Array<*>) = apply {
-        if (gqlParams.size != params.size) return GqlException("jumlah param nya beda")
+        if (gqlParams.size != params.size) return GqlException(ArrayIndexOutOfBoundsException)
         gqlParams.toList().forEachIndexed { index, any ->
             any?.let {
                 if (it.javaClass != Class.forName(params[index].type)) {
-                    return GqlException("tipe data nya beda")
+                    return GqlException(IllegalArgumentException)
                 }
             }
         }
@@ -28,6 +28,11 @@ open class Gql {
     private fun collectParameters() = apply {
         params.clear()
         params.addAll(QueryParameterParser.parameters(query))
+    }
+
+    companion object {
+        private const val ArrayIndexOutOfBoundsException = "gql: ArrayIndexOutOfBoundsException"
+        private const val IllegalArgumentException = "gql: IllegalArgumentException"
     }
 
 }
