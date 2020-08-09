@@ -1,4 +1,4 @@
-package query
+package gql.entity
 
 data class QueryParams(
     val variable: String,
