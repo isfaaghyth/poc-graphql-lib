@@ -17,8 +17,8 @@ created lightweight graphql network lib for `kotlin/jvm` okhttp based and `kotli
 ### phase 1: graphql query builder
 `query_sample.json`
 ```
-mutation test_isfa_ganteng($name: String, $age: Int, $verified: Boolean) {
-    test_isfa_ganteng(name: $name, age: $age, verified: $verified) {
+mutation employee($name: String, $age: Int, $verified: Boolean) {
+    employee(name: $name, age: $age, verified: $verified) {
         status
         data {
             name
@@ -35,7 +35,7 @@ mutation test_isfa_ganteng($name: String, $age: Int, $verified: Boolean) {
 `Test.kt`
 ```kt
 Gql()
-    .queries(fakeQuery())
+    .queries("query_sample.json")
     .parameters(arrayOf(
         "Muh Isfhani Ghiath",
         23,
