@@ -1,7 +1,7 @@
 package gql
 
 import gql.entity.QueryParams
-import gql.query.QueryParameterParser
+import gql.query.ParameterParser
 import gql.util.LegacyGqlException
 
 @Deprecated("Please use Gql.kt")
@@ -28,7 +28,7 @@ open class LegacyGql {
 
     private fun collectParameters() = apply {
         params.clear()
-        params.addAll(QueryParameterParser.oldParameters(query))
+        params.addAll(ParameterParser.oldParameters(query))
     }
 
     companion object {

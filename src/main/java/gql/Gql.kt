@@ -2,7 +2,7 @@ package gql
 
 import gql.network.OkhttpBuilder
 import gql.network.RequestBuilder
-import gql.query.QueryParameterParser
+import gql.query.ParameterParser
 import gql.util.GqlException
 
 open class Gql {
@@ -57,7 +57,7 @@ open class Gql {
 
     private fun collectParameters(query: String) = apply {
         params.clear()
-        params.putAll(QueryParameterParser.parameters(query))
+        params.putAll(ParameterParser.parse(query))
     }
 
     companion object {

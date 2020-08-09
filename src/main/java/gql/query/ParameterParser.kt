@@ -2,13 +2,13 @@ package gql.query
 
 import gql.entity.QueryParams
 
-object QueryParameterParser {
+object ParameterParser {
 
     // currently. graphql only supported for 3 data types.
     private const val pattern = "\\\$[A-Za-z|0-9]+(\\.[A-Za-z]+)*: (?:String|Int|Boolean)"
     private val regex = Regex(pattern)
 
-    fun parameters(query: String): Map<String, Any> {
+    fun parse(query: String): Map<String, Any> {
         val temp = mutableMapOf<String, Any>()
         regex.findAll(query).forEach {
             val result = separateParams(it.value)
