@@ -1,4 +1,4 @@
-package util
+package gql.util
 
 import com.google.gson.Gson
 import java.io.File

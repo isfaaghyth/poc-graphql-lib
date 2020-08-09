@@ -1,6 +1,10 @@
+package gql
+
+import gql.util.FileUtil
 import org.junit.Assert
 import org.junit.Test
-import util.FileUtil
+import query.QueryParams
+import query.QueryParameterParser
 
 class QueryParameterParserTest {
 

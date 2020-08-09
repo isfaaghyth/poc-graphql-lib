@@ -1,3 +1,5 @@
+package query
+
 object QueryParameterParser {
 
     private const val pattern = "\\\$[A-Za-z|0-9]+(\\.[A-Za-z]+)*: (?:String|Int|Boolean)"
