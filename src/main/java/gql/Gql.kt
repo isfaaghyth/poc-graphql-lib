@@ -1,16 +1,17 @@
 package gql
 
+import gql.network.RequestBuilder
 import gql.query.QueryParameterParser
 import gql.util.GqlException
 
 open class Gql {
 
+    private lateinit var requestBuilder: RequestBuilder
     private val params = mutableMapOf<String, Any>()
-    private lateinit var query: String
 
     fun queries(rawQuery: String) = apply {
-        query = rawQuery
-        collectParameters()
+        requestBuilder = RequestBuilder(rawQuery)
+        collectParameters(rawQuery)
     }
 
     fun parameters(gqlParams: Map<String, Any>) = apply {
@@ -18,7 +19,7 @@ open class Gql {
 
         // validate query keys
         if (!gqlParams.keys.containsAll(params.keys)) {
-            return GqlException("$ClassCastException oldParameters not exact same")
+            return GqlException("$ObjectNotFoundException a few parameters not found")
         }
 
         // validate variable data type
@@ -27,9 +28,12 @@ open class Gql {
                 return GqlException("$IllegalArgumentException ${gqlParams[it]} is not ${params[it]}")
             }
         }
+
+        // valid
+        requestBuilder.parameters(gqlParams)
     }
 
-    private fun collectParameters() = apply {
+    private fun collectParameters(query: String) = apply {
         params.clear()
         params.putAll(QueryParameterParser.parameters(query))
     }
@@ -37,7 +41,7 @@ open class Gql {
     companion object {
         private const val ArrayIndexOutOfBoundsException = "ArrayIndexOutOfBoundsException:"
         private const val IllegalArgumentException = "IllegalArgumentException:"
-        private const val ClassCastException = "ClassCastException:"
+        private const val ObjectNotFoundException = "ObjectNotFoundException:"
     }
 
 }
