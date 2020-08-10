@@ -9,10 +9,12 @@ created lightweight graphql network lib for `kotlin/jvm` okhttp based and `kotli
 - identifiers any parameters from string query
 
 ### todo
-- [ ] identifier of parameters from graphql query
-- [ ] convert `plain-text data` type into `data type object`
-- [ ] create graphql query parameters builder
-- [ ] ...
+- [x] identifier of parameters from graphql query
+- [x] convert `plain-text data` type into `data type object` (cancelled)
+- [x] create graphql query parameters builder
+- [x] create request builder for graphql
+- [x] create okhttp network builder
+- [ ] onError
 
 ### phase 1: graphql query builder
 `query_sample.json`
@@ -35,7 +37,7 @@ mutation employee($name: String, $age: Int, $verified: Boolean) {
 `Test.kt`
 ```kt
 Gql()
-    .queries("query_sample.json")
+    .query("query_sample.json")
     .parameters(mapOf(
         "name" to "Muh Isfhani Ghiath",
         "age" to 23,
@@ -45,5 +47,26 @@ Gql()
         if (response != null) {
             // yey!
         }
+    }
+```
+
+### phase 2: network poc
+`Test.kt`
+```kt
+Gql()
+    .url("https://isfa.test/")
+    .query("query_sample.json")
+    .parameters(mapOf(
+        "name" to "Muh Isfhani Ghiath",
+        "age" to 23,
+        "verified" to true
+    ))
+    .request { response ->
+        if (response != null) {
+            // yey!
+        }
+    }
+    .error { throwable ->
+        // oops!
     }
 ```
