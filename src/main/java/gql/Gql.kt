@@ -8,18 +8,18 @@ import gql.util.GqlException
 open class Gql {
 
     private lateinit var url: String
-
-    private lateinit var requestBuilder: RequestBuilder
+    private lateinit var gqlQuery: String
     private val params = mutableMapOf<String, Any>()
-
     private val network by lazy { OkhttpBuilder() }
+    private val requestBuilder by lazy { RequestBuilder(gqlQuery) }
+    var onError: ((Throwable) -> Unit) = {}
 
     fun setUrl(mainUrl: String) = apply {
         url = mainUrl
     }
 
-    fun queries(rawQuery: String) = apply {
-        requestBuilder = RequestBuilder(rawQuery)
+    fun query(rawQuery: String) = apply {
+        gqlQuery = rawQuery
         collectParameters(rawQuery)
     }
 
@@ -42,18 +42,18 @@ open class Gql {
         requestBuilder.parameters(gqlParams)
     }
 
-    fun request(result: (String?) -> Unit) = apply {
-        if (!::url.isInitialized) {
-            return GqlException("$UrlNotFoundException you haven't set main url yet.")
-        }
+    fun request(response: (String) -> Unit) = apply {
+        if (!::url.isInitialized) return GqlException("$UrlNotFoundException you haven't set main url yet.")
+        if (!::gqlQuery.isInitialized) return GqlException("$QueryNotFoundException you haven't set gql query yet.")
 
-        result(
-            network.post(
-                url,
-                requestBuilder.build()
-            )
-        )
+        network.post(url, requestBuilder.build(), {
+            it?.let { res -> response(res) }
+        }, {
+            onError(it)
+        })
     }
+
+    fun error(error: (Throwable) -> Unit) = apply { onError = error }
 
     private fun collectParameters(query: String) = apply {
         params.clear()
@@ -64,6 +64,7 @@ open class Gql {
         private const val ArrayIndexOutOfBoundsException = "ArrayIndexOutOfBoundsException:"
         private const val IllegalArgumentException = "IllegalArgumentException:"
         private const val ObjectNotFoundException = "ObjectNotFoundException:"
+        private const val QueryNotFoundException = "QueryNotFoundException:"
         private const val UrlNotFoundException = "UrlNotFoundException:"
     }
 

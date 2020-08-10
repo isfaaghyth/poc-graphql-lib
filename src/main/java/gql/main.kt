@@ -6,11 +6,11 @@ fun main() {
 
 fun new() {
     Gql().setUrl("https://metaphysics-production.artsy.net/")
-        .queries(fakeQuery())
+        .query(fakeQuery())
         .request { response ->
-            if (response != null) {
-                println(response)
-            }
+            println(response)
+        }.error {
+            println(it.localizedMessage)
         }
 }
 
